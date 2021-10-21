@@ -6,18 +6,20 @@ RSpec.describe SubscribeJob, type: :job do
   describe 'pulls published messages from Google Pubsub' do
     before do
       ActiveJob::Base.queue_adapter = :test
+      @subscription_id = 'responses_subscription'
     end
 
     it 'should respond to #perform_later' do
       expect(described_class).to respond_to(:perform_later)
       expect(described_class.queue_name).to eq('responses')
-      expect {described_class.perform_later}.to have_enqueued_job
+      expect {described_class.perform_later(@subscription_id)}.to have_enqueued_job
     end
   end
 
   describe 'when Exception is raised' do
     before do
       allow_any_instance_of(described_class).to receive(:perform).and_raise(StandardError.new)
+      @subscription_id = 'responses_subscription'
     end
 
     it 'receives retry_on 3 times' do
@@ -30,7 +32,7 @@ RSpec.describe SubscribeJob, type: :job do
       expect_any_instance_of(described_class).to receive(:retry_job)
 
       perform_enqueued_jobs do
-        described_class.perform_later rescue StandardError
+        described_class.perform_later(@subscription_id) rescue StandardError
       end
     end
   end

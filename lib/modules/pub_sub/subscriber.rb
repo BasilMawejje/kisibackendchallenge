@@ -1,13 +1,12 @@
-# Receives messages via `Subscriber.new.call/0`
+# Receives messages via `Subscriber.new.call/1` with subscription_id param.
 require 'google/cloud/pubsub'
 load "#{Rails.root}/lib/modules/pub_sub/queue_adapter.rb"
 
 class Subscriber
-  SUBSCRIPTION_ID = 'responses-subscription'.freeze
-
-  def call
+  
+  def call(subscription_id)
     pubsub = QueueAdapter.call
-    subscription = pubsub.subscription SUBSCRIPTION_ID
+    subscription = pubsub.subscription subscription_id
     subscriber   = subscription.listen do |received_message|
       Rails.logger.info "Received message: #{received_message.data}"
       received_message.acknowledge!

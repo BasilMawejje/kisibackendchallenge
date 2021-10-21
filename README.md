@@ -4,6 +4,7 @@
 -  In your terminal, `cd` into the cloned repo. 
 - Run `bundle install` then create and migrate your local database i.e `rails db:create db:migrate`
 - Start sidekiq to listen to the `responses` queue with `bundle exec sidekiq -q responses` in your terminal.
+  You can check your local instance of sidekiq at `http://localhost:3000/sidekiq`
 - In another terminal tab, start your rails server with `bundle exec rails s`
 - To run tests, run `bundle exec rspec`
 
@@ -20,7 +21,7 @@
 - In your terminal, run `rails c`
 - Load the PubSub modue into the console with `load "#{Rails.root}/lib/modules/pub_sub/pub_sub.rb"`
 - To publish a message, run `PubSub.publish('topic_you_created_in_gcp', 'message')`
-- To subscribe to messages run `PubSub.subscribe`
+- To subscribe to messages run `PubSub.subscribe(subscription_id_in_gcp_console)`
 
 ## Clean up (Optional): 
   - Follow the clean up section on this [link](https://cloud.google.com/ruby/getting-started/using-pub-sub) to delete topics and subscriptions on GCP.
