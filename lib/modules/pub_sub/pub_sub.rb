@@ -3,7 +3,7 @@ module PubSub
     PublishJob.new.perform_later(topic, message)
   end
 
-  def self.subscribe
-    SubscribeJob.new.perform_later
+  def self.subscribe(subscription_id)
+    SubscribeJob.new.perform_later(subscription_id)
   end
 end
